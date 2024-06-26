@@ -43,6 +43,7 @@ pygame.display.set_caption(title)
 start_img = pygame.image.load('start.png').convert_alpha()
 exit_img = pygame.image.load('exit.png').convert_alpha()
 settings_img = pygame.image.load('settings.png').convert_alpha()
+leaderboard_img = pygame.image.load('leaderboard.png').convert_alpha()
 
 # loads the background image I want
 path_to_image = "vecteezy_beautiful-seasonal-nature-mountain-landscape-illustration_9155728-1.jpg"
@@ -86,8 +87,10 @@ class Button():
 
 
 # create button instances
-start_button = Button(425, 450, start_img, 0.15)
-exit_button = Button(425, 550, exit_img, 0.15)
+start_button = Button(400, 400, start_img, 0.175)
+leaderboard_button = Button(400, 475, leaderboard_img, 0.175)
+settings_button = Button(400, 550, settings_img, 0.175)
+exit_button = Button(400, 625, exit_img, 0.175)
 
 # game loop
 """run = True
@@ -121,14 +124,14 @@ run = True
 while run:
     try:
 
-   
-
-        screen.fill(background_colour)  #
+        screen.fill(background_colour)  
         image = pygame.transform.scale(pygame.image.load(path_to_image), [int(length), int(height)])
         screen.blit(image, [left_edge, top_edge])
 
         start_button.draw()
         exit_button.draw()
+        settings_button.draw()
+        leaderboard_button.draw()
 
         # event handler
         for event in pygame.event.get():
