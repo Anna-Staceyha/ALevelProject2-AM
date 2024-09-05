@@ -1,146 +1,141 @@
-"""
-import pygame
-import sys
+import pygame, sys
+from button import Button
 
-#creating and setting caption of the screen
-screen = pygame.display.set_mode((1080, 720))
-pygame.display.set_caption("Images in PyGame!")
+pygame.init()
 
-#surface - the image i want
-backgroundImage = pygame.image.load("vecteezy_beautiful-seasonal-nature-mountain-landscape-illustration_9155728-1.jpg")
-backgroundImage_rect = backgroundImage.get_rect(center=(0, 0))
+SCREEN = pygame.display.set_mode((1280, 720))
+pygame.display.set_caption("Menu")
+
+BG = pygame.image.load("assets/Background.png")
 
 
-#game loop
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    #makes screen blank
-    screen.fill("white")
+def get_font(size): # Returns Press-Start-2P in the desired size
+    return pygame.font.Font("assets/font.ttf", size)
 
-    screen.blit(backgroundImage, (backgroundImage_rect))
-    #display the screen
+def play():
+    while True:
+        PLAY_MOUSE_POS = pygame.mouse.get_pos()
 
+        SCREEN.fill("dark blue")
 
-    pygame.display.update()"""
+        PLAY_TEXT = get_font(45).render("Levels", True, "White")
+        PLAY_RECT = PLAY_TEXT.get_rect(center=(640, 60))
+        SCREEN.blit(PLAY_TEXT, PLAY_RECT)
 
-import pygame
+        PLAY_BACK = Button(image=None, pos=(640, 660), 
+                            text_input="BACK", font=get_font(75), base_color="White", hovering_color="Green")
 
-# dimensions of the game
-screen_length = 1080
-screen_height = 720
+        PLAY_BACK.changeColor(PLAY_MOUSE_POS)
+        PLAY_BACK.update(SCREEN)
 
-# sets the background colour to light grey
-background_colour = (200, 200, 200)
-title = "Anna's Game"
+        PLAY_LEVEL1 = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250), 
+                            text_input="Level 1", font=get_font(55), base_color="#d7fcd4", hovering_color="White")
+        
+        PLAY_LEVEL1.changeColor(PLAY_MOUSE_POS)
+        PLAY_LEVEL1.update(SCREEN)
+    
 
-screen = pygame.display.set_mode([screen_length, screen_height])
-pygame.display.set_caption(title)
-
-# load button images
-start_img = pygame.image.load('start.png').convert_alpha()
-exit_img = pygame.image.load('exit.png').convert_alpha()
-settings_img = pygame.image.load('settings.png').convert_alpha()
-leaderboard_img = pygame.image.load('leaderboard.png').convert_alpha()
-
-# loads the background image I want
-path_to_image = "vecteezy_beautiful-seasonal-nature-mountain-landscape-illustration_9155728-1.jpg"
+        PLAY_LEVEL2 = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 400), 
+                            text_input="Level 2", font=get_font(55), base_color="#d7fcd4", hovering_color="White")
+        
+        PLAY_LEVEL2.changeColor(PLAY_MOUSE_POS)
+        PLAY_LEVEL2.update(SCREEN)
 
 
-# ensures that the whole image is displayed
-length = screen_length
-height = screen_height
-left_edge = 0
-top_edge = 0
+        PLAY_LEVEL3 = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 550), 
+                            text_input="Level 3", font=get_font(55), base_color="#d7fcd4", hovering_color="White")
+        
+        PLAY_LEVEL3.changeColor(PLAY_MOUSE_POS)
+        PLAY_LEVEL3.update(SCREEN)
 
-# button class
+        for button in [PLAY_LEVEL1, PLAY_LEVEL2, PLAY_LEVEL3]:
+            button.changeColor(PLAY_MOUSE_POS)
+            button.update(SCREEN)
 
-class Button():
-    def __init__(self, x, y, image, scale):
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.clicked = False
-        self.click_delay = 100 # Delay in milliseconds
-        self.last_click = 0
-
-# New Line test
-    def draw(self):
-
-        # get mouse position
-        pos = pygame.mouse.get_pos()
-
-        # check mouseover and clicked conditions
-        if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                self.clicked = True
-                self.last_click = pygame.time.get_ticks()
-            elif pygame.mouse.get_pressed()[0] == 0:
-                self.clicked = False
-
-        # draw button on screen
-        screen.blit(self.image, (self.rect.x, self.rect.y))
-
-
-# create button instances
-start_button = Button(400, 400, start_img, 0.175)
-leaderboard_button = Button(400, 475, leaderboard_img, 0.175)
-settings_button = Button(400, 550, settings_img, 0.175)
-exit_button = Button(400, 625, exit_img, 0.175)
-
-# game loop
-"""run = True
-while run:
-
-    # loads the background image I want
-    path_to_image = "vecteezy_beautiful-seasonal-nature-mountain-landscape-illustration_9155728-1.jpg"
-    # ensures that the whole image is displayed
-    length = screen_length
-    height = screen_height
-    left_edge = 0
-    top_edge = 0
-
-    start_button.draw()
-    exit_button.draw()
-
-    # event handler
-    for event in pygame.event.get():
-        # quit game
-        if event.type == pygame.QUIT:
-            run = False
-
-    pygame.display.update()
-
-pygame.quit()"""
-
-
-
-# game loop
-run = True
-while run:
-    try:
-
-        screen.fill(background_colour)  
-        image = pygame.transform.scale(pygame.image.load(path_to_image), [int(length), int(height)])
-        screen.blit(image, [left_edge, top_edge])
-
-        start_button.draw()
-        exit_button.draw()
-        settings_button.draw()
-        leaderboard_button.draw()
-
-        # event handler
+    
         for event in pygame.event.get():
-            # quit game
             if event.type == pygame.QUIT:
-                run = False
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
+                    main_menu()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if PLAY_LEVEL1.checkForInput(PLAY_MOUSE_POS):
+                        play()
+                if PLAY_LEVEL2.checkForInput(PLAY_MOUSE_POS):
+                    options()
+                if PLAY_LEVEL3.checkForInput(PLAY_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
 
         pygame.display.update()
-    except Exception as e:
-        print("An error occurred:", e)
-        pygame.quit()
+    
+def options():
+    while True:
+        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
+        SCREEN.fill("white")
+
+        OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
+        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
+
+        OPTIONS_BACK = Button(image=None, pos=(640, 460), 
+                            text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
+
+        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
+        OPTIONS_BACK.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
+                    main_menu()
+
+        pygame.display.update()
+
+def main_menu():
+    while True:
+        SCREEN.blit(BG, (0, 0))
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = get_font(80).render("Earthly Duo", True, "#89cff0")
+        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+
+        PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250), 
+                            text_input="PLAY", font=get_font(55), base_color="#d7fcd4", hovering_color="White")
+        OPTIONS_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 400), 
+                            text_input="OPTIONS", font=get_font(55), base_color="#d7fcd4", hovering_color="White")
+        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 550), 
+                            text_input="QUIT", font=get_font(55), base_color="#d7fcd4", hovering_color="White")
+
+        SCREEN.blit(MENU_TEXT, MENU_RECT)
+
+        for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+            button.changeColor(MENU_MOUSE_POS)
+            button.update(SCREEN)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    play()
+                if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    options()
+                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+
+
+
+
+main_menu()
