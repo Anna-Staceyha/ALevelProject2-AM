@@ -679,7 +679,7 @@ world = World()
 player, health_bar = world.process_data(world_data)
 
 
-def options():
+"""def options():
     while True:
         screen.fill(BG)  # Fill the background
 
@@ -691,7 +691,7 @@ def options():
         screen.blit(OPTIONS_TEXT, OPTIONS_RECT)  # Draw the options text
 
         # Create the back button
-        BACK_BUTTON = Button(x=640, y=400, image=pygame.image.load("img/back_btn.png"), scale=1)
+        BACK_BUTTON = Button(x=700, y=670, image=pygame.image.load("img/back_btn.png"), scale=1)
 
         # Draw the back button and check for input
         BACK_BUTTON.draw(screen)
@@ -705,7 +705,73 @@ def options():
                 if BACK_BUTTON.rect.collidepoint(MENU_MOUSE_POS):  # Check if mouse is over the button
                     return  # Exit the options function to go back to the main menu
 
+        pygame.display.update()  # Update the display"""
+
+class Slider:
+    def __init__(self, x, y, width, height, min_value=0, max_value=100, initial_value=50):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.slider_rect = pygame.Rect(x, y, height, height)  # Square slider
+        self.min_value = min_value
+        self.max_value = max_value
+        self.value = initial_value
+        self.is_dragging = False
+
+    def draw(self, surface):
+        # Draw the slider track
+        pygame.draw.rect(surface, (200, 200, 200), self.rect)
+        # Draw the slider knob
+        self.slider_rect.x = self.rect.x + (self.value - self.min_value) / (self.max_value - self.min_value) * (self.rect.width - self.slider_rect.width)
+        pygame.draw.rect(surface, (100, 100, 100), self.slider_rect)
+
+    def update(self):
+        # Get mouse position
+        mouse_pos = pygame.mouse.get_pos()
+
+        if self.is_dragging:
+            # Update value based on mouse position
+            if self.rect.collidepoint(mouse_pos):
+                self.value = self.min_value + (mouse_pos[0] - self.rect.x) / self.rect.width * (self.max_value - self.min_value)
+                self.value = max(self.min_value, min(self.max_value, self.value))  # Clamp value
+
+        # Check for mouse events
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.slider_rect.collidepoint(mouse_pos):
+                    self.is_dragging = True
+            if event.type == pygame.MOUSEBUTTONUP:
+                self.is_dragging = False
+
+def options():
+    volume_slider = Slider(x=640 - 150, y=300, width=300, height=20, initial_value=50)  # Adjust the position and size as needed
+
+    while True:
+        screen.fill(BG)  # Fill the background
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()  # Get the mouse position
+
+        # Load and render the options text
+        OPTIONS_TEXT = get_font(75).render("OPTIONS", True, "#b68f40")
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(500, 100))
+        screen.blit(OPTIONS_TEXT, OPTIONS_RECT)  # Draw the options text
+
+        # Create the back button
+        BACK_BUTTON = Button(x=700, y=670, image=pygame.image.load("img/back_btn.png"), scale=1)
+        BACK_BUTTON.draw(screen)  # Draw the back button
+
+        # Draw the volume slider
+        volume_slider.draw(screen)
+        volume_slider.update()  # Update the slider
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if BACK_BUTTON.rect.collidepoint(MENU_MOUSE_POS):  # Check if mouse is over the button
+                    return  # Exit the options function to go back to the main menu
+
         pygame.display.update()  # Update the display
+
 
 
 
