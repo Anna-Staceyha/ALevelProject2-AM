@@ -644,8 +644,7 @@ class ScreenFade():
 intro_fade = ScreenFade(1, BLACK, 4)
 death_fade = ScreenFade(2, PINK, 4)
 
-
-"""#create buttons
+#create buttons
 start_button = Button(SCREEN_WIDTH // 2 - 130, SCREEN_HEIGHT // 2 - 200, start_img, 1,)
 exit_button = Button(SCREEN_WIDTH // 2 - 110, SCREEN_HEIGHT // 2 + 50, exit_img, 1)
 restart_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 50, restart_img, 2)
@@ -679,104 +678,36 @@ with open(f'level{level}_data.csv', newline='') as csvfile:
 world = World()
 player, health_bar = world.process_data(world_data)
 
-"""def options():
-    while True:
-		OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
-
-        screen.fill("white")
-
-        OPTIONS_TEXT = get_font(25).render("This is the OPTIONS button.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        screen.blit(OPTIONS_TEXT, OPTIONS_RECT)
-
-        # Draw the back button
-        OPTIONS_BACK = button(image = None, pos=(640, 460),
-							text_input="BACK", font=get_font(75), base_color="Black", hovering_colour="Green")
-
-		OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-		OPTIONS_BACK.UPDATE(screen)
-
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return  # Properly exit the game
-
-            # Check for mouse click on the back button
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if back_button.rect.collidepoint(event.pos):  # Check if the back button is clicked
-                    return  # Exit this function to go back to the main menu
-
-        pygame.display.update()"""
 
 def options():
     while True:
-        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+        screen.fill(BG)  # Fill the background
 
-        screen.fill("white")
+        MENU_MOUSE_POS = pygame.mouse.get_pos()  # Get the mouse position
 
-        OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
-        screen.blit(OPTIONS_TEXT, OPTIONS_RECT)
+        # Load and render the options text (you can customize this)
+        OPTIONS_TEXT = get_font(75).render("OPTIONS", True, "#b68f40")
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(500, 100))
+        screen.blit(OPTIONS_TEXT, OPTIONS_RECT)  # Draw the options text
 
-        OPTIONS_BACK = button(image=None, pos=(640, 460), 
-                            text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
+        # Create the back button
+        BACK_BUTTON = Button(x=640, y=400, image=pygame.image.load("img/back_btn.png"), scale=1)
 
-        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-        OPTIONS_BACK.update(screen)
+        # Draw the back button and check for input
+        BACK_BUTTON.draw(screen)
 
+        # Check for mouse position and actions
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu()
+                if BACK_BUTTON.rect.collidepoint(MENU_MOUSE_POS):  # Check if mouse is over the button
+                    return  # Exit the options function to go back to the main menu
 
-        pygame.display.update()
+        pygame.display.update()  # Update the display
 
 
-def main_menu():
-    while True:
-        screen.fill(BG)
-
-        MENU_MOUSE_POS = pygame.mouse.get_pos()
-
-        MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
-
-        START_BUTTON = Button(image=pygame.image.load("img/start_btn.png"), pos=(640, 250), 
-                            text_input="", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        OPTIONS_BUTTON = Button(image=pygame.image.load("img/options_btn.png"), pos=(640, 400), 
-                            text_input="", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        EXIT_BUTTON = Button(image=pygame.image.load("img/exit_btn.png"), pos=(640, 550), 
-                            text_input="", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-
-        screen.blit(MENU_TEXT, MENU_RECT)
-
-        for button in [START_BUTTON, OPTIONS_BUTTON, EXIT_BUTTON]:
-            button.changeColor(MENU_MOUSE_POS)
-            button.update(screen)
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if START_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    # Correct indentation here
-                    if start_button.draw(screen):
-                        start_game = True
-                        start_intro = True
-                if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    options()
-                if EXIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    pygame.quit()
-                    sys.exit()
-
-        pygame.display.update()
-
-main_menu()
 
 
 run = True
