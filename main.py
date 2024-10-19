@@ -7,25 +7,61 @@ from button import Button
 import sys
 
 
+
+
+
+
+
+
 mixer.init()
 pygame.init()
+
+
+
+
+
+
 
 
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pygame.font.Font("assets/font.ttf", size)
 
 
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
+
+
+
+
+
+
+SCREEN_WIDTH = 990
+SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.6)
+
+
+
+
+
+
 
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Anna's Game")
+pygame.display.set_caption("Night Ops")
+
+
+
+
+
+
 
 
 #set framerate
 clock = pygame.time.Clock()
 FPS = 60
+
+
+
+
+
+
 
 
 #define game variables
@@ -45,12 +81,36 @@ start_intro = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 #define player action variables
 moving_left = False
 moving_right = False
 shoot = False
 grenade = False
 grenade_thrown = False
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -69,6 +129,18 @@ grenade_fx.set_volume(0.05)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 #load images
 #button images
 start_img = pygame.image.load('img/start_btn.png').convert_alpha()
@@ -77,7 +149,13 @@ restart_img = pygame.image.load('img/restart_btn.png').convert_alpha()
 options_img = pygame.image.load('img/options_btn.png').convert_alpha()
 back_img = pygame.image.load('img/back_btn.png').convert_alpha()
 #background
-background_img = pygame.image.load('img/Background/Backrgnd.jpg').convert_alpha()
+background_img = pygame.image.load('img/Background/Background.jpg').convert_alpha()
+
+
+
+
+
+
 
 
 #store tiles in a list
@@ -103,6 +181,18 @@ item_boxes = {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 #define colours
 BG = (144, 201, 120)
 RED = (255, 0, 0)
@@ -112,13 +202,37 @@ BLACK = (0, 0, 0)
 PINK = (235, 65, 54)
 
 
+
+
+
+
+
+
 #define font
 font = pygame.font.SysFont('Futura', 30)
+
+
+
+
+
+
 
 
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -130,11 +244,41 @@ def draw_text(text, font, text_col, x, y):
         screen.blit(background_img, ((x * width) - bg_scroll * 0.5, 0))"""
 
 
+
+
+
+
+
+
 def draw_bg():
     # Scale the background image to fit the screen size
     scaled_background = pygame.transform.scale(background_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
     # Blit the scaled background to cover the whole screen
     screen.blit(scaled_background, (0, 0))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -155,6 +299,12 @@ def reset_level():
     exit_group.empty()
 
 
+
+
+
+
+
+
     #create empty tile list
     data = []
     for row in range(ROWS):
@@ -162,7 +312,37 @@ def reset_level():
         data.append(r)
 
 
+
+
+
+
+
+
     return data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -212,11 +392,29 @@ class Soldier(pygame.sprite.Sprite):
             self.animation_list.append(temp_list)
 
 
+
+
+
+
+
+
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.width = self.image.get_width()
         self.height = self.image.get_height()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -231,11 +429,29 @@ class Soldier(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     def move(self, moving_left, moving_right):
         #reset movement variables
         screen_scroll = 0
         dx = 0
         dy = 0
+
+
+
+
+
+
 
 
         #assign movement variables if moving left or right
@@ -249,6 +465,12 @@ class Soldier(pygame.sprite.Sprite):
             self.direction = 1
 
 
+
+
+
+
+
+
         #jump
         if self.jump == True and self.in_air == False:
             self.vel_y = -13
@@ -256,11 +478,23 @@ class Soldier(pygame.sprite.Sprite):
             self.in_air = True
 
 
+
+
+
+
+
+
         #apply gravity
         self.vel_y += GRAVITY
         if self.vel_y > 10:
             self.vel_y
         dy += self.vel_y
+
+
+
+
+
+
 
 
         #check for collision
@@ -287,9 +521,27 @@ class Soldier(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         #check for collision with water
         if pygame.sprite.spritecollide(self, water_group, False):
             self.health = 0
+
+
+
+
+
+
 
 
         #check for collision with exit
@@ -298,9 +550,27 @@ class Soldier(pygame.sprite.Sprite):
             level_complete = True
 
 
+
+
+
+
+
+
         #check if fallen off the map
         if self.rect.bottom > SCREEN_HEIGHT:
             self.health = 0
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -311,9 +581,21 @@ class Soldier(pygame.sprite.Sprite):
                 dx = 0
 
 
+
+
+
+
+
+
         #update rectangle position
         self.rect.x += dx
         self.rect.y += dy
+
+
+
+
+
+
 
 
         #update scroll based on player position
@@ -324,7 +606,31 @@ class Soldier(pygame.sprite.Sprite):
                 screen_scroll = -dx
 
 
+
+
+
+
+
+
         return screen_scroll, level_complete
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -339,6 +645,18 @@ class Soldier(pygame.sprite.Sprite):
             #reduce ammo
             self.ammo -= 1
             shot_fx.play()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -369,6 +687,12 @@ class Soldier(pygame.sprite.Sprite):
                     self.vision.center = (self.rect.centerx + 75 * self.direction, self.rect.centery)
 
 
+
+
+
+
+
+
                     if self.move_counter > TILE_SIZE:
                         self.direction *= -1
                         self.move_counter *= -1
@@ -378,8 +702,26 @@ class Soldier(pygame.sprite.Sprite):
                         self.idling = False
 
 
+
+
+
+
+
+
         #scroll
         self.rect.x += screen_scroll
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -405,6 +747,24 @@ class Soldier(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def update_action(self, new_action):
         #check if the new action is different to the previous one
         if new_action != self.action:
@@ -412,6 +772,24 @@ class Soldier(pygame.sprite.Sprite):
             #update the animation settings
             self.frame_index = 0
             self.update_time = pygame.time.get_ticks()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -428,8 +806,29 @@ class Soldier(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
+
+
+
+
+        
+
+
+
+
 
 
 
@@ -437,6 +836,12 @@ class Soldier(pygame.sprite.Sprite):
 class World():
     def __init__(self):
         self.obstacle_list = []
+
+
+
+
+
+
 
 
     def process_data(self, data):
@@ -478,7 +883,25 @@ class World():
                         exit_group.add(exit)
 
 
+
+
+
+
+
+
         return player, health_bar
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -491,6 +914,18 @@ class World():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 class Decoration(pygame.sprite.Sprite):
     def __init__(self, img, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -499,8 +934,26 @@ class Decoration(pygame.sprite.Sprite):
         self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
 
 
+
+
+
+
+
+
     def update(self):
         self.rect.x += screen_scroll
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -513,8 +966,20 @@ class Water(pygame.sprite.Sprite):
         self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
 
 
+
+
+
+
+
+
     def update(self):
         self.rect.x += screen_scroll
+
+
+
+
+
+
 
 
 class Exit(pygame.sprite.Sprite):
@@ -525,8 +990,26 @@ class Exit(pygame.sprite.Sprite):
         self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
 
 
+
+
+
+
+
+
     def update(self):
         self.rect.x += screen_scroll
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -538,6 +1021,18 @@ class ItemBox(pygame.sprite.Sprite):
         self.image = item_boxes[self.item_type]
         self.rect = self.image.get_rect()
         self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -562,12 +1057,30 @@ class ItemBox(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 class HealthBar():
     def __init__(self, x, y, health, max_health):
         self.x = x
         self.y = y
         self.health = health
         self.max_health = max_health
+
+
+
+
+
+
 
 
     def draw(self, health):
@@ -582,6 +1095,18 @@ class HealthBar():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, direction):
         pygame.sprite.Sprite.__init__(self)
@@ -590,6 +1115,12 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.direction = direction
+
+
+
+
+
+
 
 
     def update(self):
@@ -604,6 +1135,12 @@ class Bullet(pygame.sprite.Sprite):
                 self.kill()
 
 
+
+
+
+
+
+
         #check collision with characters
         if pygame.sprite.spritecollide(player, bullet_group, False):
             if player.alive:
@@ -614,6 +1151,24 @@ class Bullet(pygame.sprite.Sprite):
                 if enemy.alive:
                     enemy.health -= 25
                     self.kill()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -634,10 +1189,22 @@ class Grenade(pygame.sprite.Sprite):
         self.direction = direction
 
 
+
+
+
+
+
+
     def update(self):
         self.vel_y += GRAVITY
         dx = self.direction * self.speed
         dy = self.vel_y
+
+
+
+
+
+
 
 
         #check for collision with level
@@ -661,9 +1228,27 @@ class Grenade(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         #update grenade position
         self.rect.x += dx + screen_scroll
         self.rect.y += dy
+
+
+
+
+
+
 
 
         #countdown timer
@@ -687,6 +1272,24 @@ class Grenade(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, x, y, scale):
         pygame.sprite.Sprite.__init__(self)
@@ -704,14 +1307,38 @@ class Explosion(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     def update(self):
         #scroll
         self.rect.x += screen_scroll
 
 
+
+
+
+
+
+
         EXPLOSION_SPEED = 4
         #update explosion amimation
         self.counter += 1
+
+
+
+
+
+
 
 
         if self.counter >= EXPLOSION_SPEED:
@@ -726,12 +1353,36 @@ class Explosion(pygame.sprite.Sprite):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 class ScreenFade():
     def __init__(self, direction, colour, speed):
         self.direction = direction
         self.colour = colour
         self.speed = speed
         self.fade_counter = 0
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -750,7 +1401,25 @@ class ScreenFade():
             fade_complete = True
 
 
+
+
+
+
+
+
         return fade_complete
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -760,12 +1429,30 @@ intro_fade = ScreenFade(1, BLACK, 4)
 death_fade = ScreenFade(2, PINK, 4)
 
 
+
+
+
+
+
+
 #create buttons
-start_button = Button(SCREEN_WIDTH // 2 - 130, SCREEN_HEIGHT // 2 - 200, start_img, 1,)
-exit_button = Button(SCREEN_WIDTH // 2 - 110, SCREEN_HEIGHT // 2 + 50, exit_img, 1)
+start_button = Button(SCREEN_WIDTH // 5 - 1, SCREEN_HEIGHT // 2 - 50, start_img, 1)
+exit_button = Button(SCREEN_WIDTH // 5 + 350, SCREEN_HEIGHT // 2 - 50, exit_img, 1)
 restart_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 50, restart_img, 2)
-options_button = Button(SCREEN_WIDTH // 2 - 125, SCREEN_HEIGHT // 2 - 75, options_img, 1.25)  # Adjust scale as needed"""
+options_button = Button(SCREEN_WIDTH // 2 - -400, SCREEN_HEIGHT // 2 - -200, options_img, 0.1)  
  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -779,6 +1466,24 @@ item_box_group = pygame.sprite.Group()
 decoration_group = pygame.sprite.Group()
 water_group = pygame.sprite.Group()
 exit_group = pygame.sprite.Group()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -802,12 +1507,36 @@ player, health_bar = world.process_data(world_data)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 """def options():
     while True:
         screen.fill(BG)  # Fill the background
 
 
+
+
+
+
+
+
         MENU_MOUSE_POS = pygame.mouse.get_pos()  # Get the mouse position
+
+
+
+
+
+
 
 
         # Load and render the options text (you can customize this)
@@ -816,12 +1545,30 @@ player, health_bar = world.process_data(world_data)
         screen.blit(OPTIONS_TEXT, OPTIONS_RECT)  # Draw the options text
 
 
+
+
+
+
+
+
         # Create the back button
         BACK_BUTTON = Button(x=700, y=670, image=pygame.image.load("img/back_btn.png"), scale=1)
 
 
+
+
+
+
+
+
         # Draw the back button and check for input
         BACK_BUTTON.draw(screen)
+
+
+
+
+
+
 
 
         # Check for mouse position and actions
@@ -834,10 +1581,22 @@ player, health_bar = world.process_data(world_data)
                     return  # Exit the options function to go back to the main menu
 
 
+
+
+
+
+
+
         pygame.display.update()  # Update the display"""
 
 
-class Slider:
+
+
+
+
+
+
+"""class Slider:
     def __init__(self, x, y, width, height, min_value=0, max_value=100, initial_value=50):
         self.rect = pygame.Rect(x, y, width, height)
         self.slider_rect = pygame.Rect(x, y, height, height)  # Square slider
@@ -845,6 +1604,12 @@ class Slider:
         self.max_value = max_value
         self.value = initial_value
         self.is_dragging = False
+
+
+
+
+
+
 
 
     def draw(self, surface):
@@ -855,9 +1620,21 @@ class Slider:
         pygame.draw.rect(surface, (100, 100, 100), self.slider_rect)
 
 
+
+
+
+
+
+
     def update(self):
         # Get mouse position
         mouse_pos = pygame.mouse.get_pos()
+
+
+
+
+
+
 
 
         if self.is_dragging:
@@ -867,24 +1644,54 @@ class Slider:
                 self.value = max(self.min_value, min(self.max_value, self.value))  # Clamp value
 
 
+
+
+
+
+
+
         # Check for mouse events
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.slider_rect.collidepoint(mouse_pos):
                     self.is_dragging = True
             if event.type == pygame.MOUSEBUTTONUP:
-                self.is_dragging = False
+                self.is_dragging = False"""
+
+
+
+
+
+
 
 
 def options():
     volume_slider = Slider(x=640 - 150, y=300, width=300, height=20, initial_value=50)  # Adjust the position and size as needed
 
 
+
+
+
+
+
+
     while True:
         screen.fill(BG)  # Fill the background
 
 
+
+
+
+
+
+
         MENU_MOUSE_POS = pygame.mouse.get_pos()  # Get the mouse position
+
+
+
+
+
+
 
 
         # Load and render the options text
@@ -893,14 +1700,32 @@ def options():
         screen.blit(OPTIONS_TEXT, OPTIONS_RECT)  # Draw the options text
 
 
+
+
+
+
+
+
         # Create the back button
         BACK_BUTTON = Button(x=700, y=670, image=pygame.image.load("img/back_btn.png"), scale=1)
         BACK_BUTTON.draw(screen)  # Draw the back button
 
 
+
+
+
+
+
+
         # Draw the volume slider
         volume_slider.draw(screen)
         volume_slider.update()  # Update the slider
+
+
+
+
+
+
 
 
         for event in pygame.event.get():
@@ -912,7 +1737,44 @@ def options():
                     return  # Exit the options function to go back to the main menu
 
 
+
+
+
+
+
+
         pygame.display.update()  # Update the display
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+scaled_background_img = pygame.transform.scale(background_img, (1000, int(1000 * (background_img.get_height() / background_img.get_width()))))
+
+
+
+
+
+
 
 
 
@@ -927,25 +1789,50 @@ run = True
 while run:
 
 
+
+
+
+
+
+
     clock.tick(FPS)
-background_img = pygame.image.load('img/Backrgnd.jpg').convert()
-
-if start_game == False:
-    # draw menu with the image background
-    screen.blit(background_img, (0, 0))
-    
-    # add buttons
-    if start_button.draw(screen):
-        start_game = True
-        start_intro = True
-    if exit_button.draw(screen):
-        run = False
-    if options_button.draw(screen):
-        options()
 
 
+
+
+
+
+
+
+    if start_game == False:
+        #draw menu
+        screen.blit(scaled_background_img, (0, 0))  # Draw the image at the top-left corner
+        # Load and render the options text
+        MENU_TEXT = get_font(75).render("NIGHT OPS", True, "#ffffff")
+        MENU_RECT = MENU_TEXT.get_rect(center=(500, 110))
+        screen.blit(MENU_TEXT, MENU_RECT)  # Draw the MENU text
+        #add buttons
+        if start_button.draw(screen):
+            start_game = True
+            start_intro = True
+        if exit_button.draw(screen):
+            run = False
+        if options_button.draw(screen):
+            options()
             
             
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -969,14 +1856,38 @@ if start_game == False:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         player.update()
         player.draw()
+
+
+
+
+
+
 
 
         for enemy in enemy_group:
             enemy.ai()
             enemy.update()
             enemy.draw()
+
+
+
+
+
+
 
 
         #update and draw groups
@@ -996,11 +1907,29 @@ if start_game == False:
         exit_group.draw(screen)
 
 
+
+
+
+
+
+
         #show intro
         if start_intro == True:
             if intro_fade.fade():
                 start_intro = False
                 intro_fade.fade_counter = 0
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1061,6 +1990,18 @@ if start_game == False:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     for event in pygame.event.get():
         #quit game
         if event.type == pygame.QUIT:
@@ -1084,6 +2025,18 @@ if start_game == False:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         #keyboard button released
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
@@ -1099,7 +2052,35 @@ if start_game == False:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     pygame.display.update()
 
 
+
+
+
+
+
+
 pygame.quit()
+
+
+
+
+
+
+
+
+
+
